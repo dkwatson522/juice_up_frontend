@@ -48,3 +48,19 @@ export const deleteRecipe = async (id) => {
     throw error;
   }
 };
+
+// Function to update a recipe
+export const updateRecipe = async (recipe) => {
+  try {
+    const response = await axios.put(`${API_URL}/api/v1/recipes/${recipe.id}`, recipe, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating recipe:', error);
+    throw error;
+  }
+};
