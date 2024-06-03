@@ -6,7 +6,7 @@ const API_URL = 'http://localhost:3000';
 // Function to get all recipes
 export const getRecipes = async () => {
   try {
-    const response = await axios.get(`${API_URL}/recipes`, {
+    const response = await axios.get(`${API_URL}/api/v1/recipes`, {
       headers: {
         'Accept': 'application/json'
       }
@@ -21,13 +21,12 @@ export const getRecipes = async () => {
 // Function to create a new recipe
 export const createRecipe = async (recipe) => {
   try {
-    const response = await axios.post(`${API_URL}/recipes`, recipe, {
+    const response = await axios.post(`${API_URL}/api/v1/recipes`, recipe, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
     });
-    console.log('Recipe created:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error creating recipe:', error);
@@ -35,4 +34,17 @@ export const createRecipe = async (recipe) => {
   }
 };
 
-// Add more functions as needed
+// Function to delete a recipe
+export const deleteRecipe = async (id) => {
+  try {
+    const response = await axios.delete(`${API_URL}/api/v1/recipes/${id}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    throw error;
+  }
+};

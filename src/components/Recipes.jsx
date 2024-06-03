@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getRecipes, createRecipe } from "../api";
+import { getRecipes, createRecipe, deleteRecipe } from "../api";
 import { Button } from "./ui/button";
 
 const Recipes = () => {
@@ -45,13 +45,30 @@ const Recipes = () => {
     }
   };
 
+  const handleDeleteRecipe = async (id) => {
+    try {
+      await deleteRecipe(id);
+      setRecipes(recipes.filter((recipe) => recipe.id !== id));
+    } catch (error) {
+      console.error("Error deleting recipe:", error);
+    }
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Recipes</h1>
       <ul className="list-disc pl-5">
         {recipes.map((recipe) => (
-          <li key={recipe.id} className="mb-2">
-            {recipe.name}
+          <li key={recipe.id} className="mb-2 list-decimal">
+            <p>{recipe.name}</p>
+            <div className="ml-4">
+              <Button
+                onClick={() => handleDeleteRecipe(recipe.id)}
+                className="bg-red-500 text-white p-2 rounded mt-4"
+              >
+                Delete
+              </Button>
+            </div>
           </li>
         ))}
       </ul>
