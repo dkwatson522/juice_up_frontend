@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { deleteIngredient } from "../api";
 import { Button } from "./ui/button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 const UpdateRecipeModal = ({ recipe, onClose, onUpdate }) => {
   const [updatedRecipe, setUpdatedRecipe] = useState({
     ...recipe,
-    ingredients: recipe.ingredients || [],
+    ingredients_attributes: recipe.ingredients || [],
   });
 
   const handleChange = (e) => {
@@ -20,8 +23,25 @@ const UpdateRecipeModal = ({ recipe, onClose, onUpdate }) => {
     newIngredients[index][field] = value;
     setUpdatedRecipe((prevState) => ({
       ...prevState,
-      ingredients_attributes: newIngredients,
+      ingredients: newIngredients,
     }));
+  };
+
+  const handleDeleteIngredient = (index) => {
+    const ingredientId = updatedRecipe.ingredients[index].id;
+    deleteIngredient(ingredientId)
+      .then(() => {
+        const newIngredients = updatedRecipe.ingredients.filter(
+          (_, i) => i !== index
+        );
+        setUpdatedRecipe((prevState) => ({
+          ...prevState,
+          ingredients: newIngredients,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error deleting ingredient:", error);
+      });
   };
 
   const handleUpdate = () => {
@@ -73,6 +93,12 @@ const UpdateRecipeModal = ({ recipe, onClose, onUpdate }) => {
               }
               className="border border-gray-300 p-2 rounded w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <button
+              onClick={() => handleDeleteIngredient(index)}
+              className="text-red-500 hover:text-red-600 p-2"
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
           </div>
         ))}
         <div className="flex justify-end space-x-2 mt-4">

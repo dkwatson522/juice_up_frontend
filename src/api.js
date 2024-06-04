@@ -64,3 +64,18 @@ export const updateRecipe = async (recipe) => {
     throw error;
   }
 };
+
+// Function to delete an ingredient
+export const deleteIngredient = async (ingredientId) => {
+  try {
+    const response = await axios.delete(`${API_URL}/api/v1/ingredients/${ingredientId}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting ingredient:', error);
+    throw error;
+  }
+};

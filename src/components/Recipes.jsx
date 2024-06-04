@@ -41,6 +41,15 @@ const Recipes = () => {
     setIngredient({ name: "", amount: "", unit: "" });
   };
 
+  const handleRemoveIngredient = (index) => {
+    setNewRecipe((prevState) => ({
+      ...prevState,
+      ingredients_attributes: prevState.ingredients_attributes.filter(
+        (_, i) => i !== index
+      ),
+    }));
+  };
+
   const handleCreateRecipe = async () => {
     try {
       const createdRecipe = await createRecipe(newRecipe);
@@ -66,7 +75,7 @@ const Recipes = () => {
   const handleOpenModal = (recipe) => {
     setSelectedRecipe({
       ...recipe,
-      ingredients_attributes: recipe.ingredients_attributes || [],
+      ingredients_attributes: recipe.ingredients || [],
     });
     setIsModalOpen(true);
   };
@@ -101,16 +110,16 @@ const Recipes = () => {
             <div>
               <Button
                 onClick={() => handleOpenModal(recipe)}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded mr-2"
+                className="bg-green-500 hover:bg-green-600 text-white p-2 rounded mr-2"
               >
                 <FontAwesomeIcon icon={faEdit} />
               </Button>
-              <Button
+              <button
                 onClick={() => handleDeleteRecipe(recipe.id)}
-                className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+                className="text-red-500 hover:text-red-600 p-2"
               >
                 <FontAwesomeIcon icon={faTrash} />
-              </Button>
+              </button>
             </div>
           </li>
         ))}
@@ -163,8 +172,19 @@ const Recipes = () => {
 
         <ul className="list-disc pl-5 mb-4">
           {newRecipe.ingredients_attributes.map((ing, index) => (
-            <li key={index} className="mb-2 text-gray-700">
-              {ing.name} - {ing.amount} {ing.unit}
+            <li
+              key={index}
+              className="mb-2 text-gray-700 flex items-center justify-between"
+            >
+              <span>
+                {ing.name} - {ing.amount} {ing.unit}
+              </span>
+              <button
+                onClick={() => handleRemoveIngredient(index)}
+                className="text-red-500 hover:text-red-600 p-2"
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
             </li>
           ))}
         </ul>
